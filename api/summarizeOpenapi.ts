@@ -6,7 +6,7 @@ Serverless function to get all operationId/summary pairs for any openapi in text
 */
 export const GET = async (request: Request) => {
   const url = new URL(request.url);
-  const openapiUrl = url.pathname.split("/").slice(2).join("/");
+  const openapiUrl = url.searchParams.get("openapiUrl");
   const isJson = request.headers.get("accept") === "application/json";
 
   const openapiId = openapiUrl;

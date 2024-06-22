@@ -13,6 +13,7 @@ export const GET = async (request: Request) => {
     );
   const isJson =
     accept && ["application/json", "application/openapi+json"].includes(accept);
+
   const isMarkdown = !isJson && !isYaml;
 
   // 1) dereference
