@@ -14,15 +14,14 @@ export const GET = async (request: Request) => {
     openapiId && openapiUrl
       ? await getOpenapiOperations(openapiId, openapiUrl)
       : undefined;
-  console.log({ openapiUrl });
+  console.log({ openapiUrl, openapiDetails });
 
   if (!openapiDetails) {
     return;
   }
 
   const { tags } = openapiDetails;
-
-  const llmString = tags
+  const operationsPerTag = tags
     .concat({ name: "__undefined", description: "No tags present" })
     .map((tag) => {
       const description = tag.description
@@ -37,18 +36,30 @@ export const GET = async (request: Request) => {
           : x.operation.tags?.includes(tag.name),
       );
 
-      return filtered.length === 0
-        ? null
-        : `${tag.name}${description}\n${filtered
-            .map((item) => {
-              return `- ${item.id} - ${item.operation.summary}`;
-            })
-            .join("\n")}`;
+      if (filtered.length === 0) {
+        return null;
+      }
+
+      const { name } = tag;
+
+      return { name, description, operations: filtered };
+    })
+    .filter(notEmpty);
+
+  if (isJson) {
+    return Response.json(operationsPerTag);
+  }
+
+  const llmString = operationsPerTag
+    .map(({ name, description, operations }) => {
+      return `${name}${description}\n${operations
+        .map((item) => {
+          return `- ${item.id} - ${item.operation.summary}`;
+        })
+        .join("\n")}`;
     })
     .filter(notEmpty)
     .join("\n\n");
-
-  //use stuff from explorer I already made
 
   return new Response(llmString);
 };
