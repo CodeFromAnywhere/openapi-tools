@@ -5,7 +5,7 @@
       "name": "openapi",
       "scope": ["api/**/*.ts"],
       "destination": "public/openapi.json",
-      "prompt": "Consider the following files that are part of my api, and generate an openapi for this."
+      "prompt": "Consider the following files that are part of my api, and generate an openapi for this. Please note that we use the vercel routing system, e.g. api/endpoint.ts will become available at the /endpoint path, and api/[name]/endpoint.ts will be available at /{name}/endpoint with the {name} being a path parameter."
     }
   ]
 }
