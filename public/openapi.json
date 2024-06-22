@@ -9,7 +9,7 @@
     "version": "1.0.0"
   },
 
-  "servers": [{ "url": "https://subdomain.actionschema.com" }],
+  "servers": [{ "url": "https://openapi-tools.actionschema.com" }],
 
   "paths": {},
 

@@ -1,0 +1,11 @@
+{
+  "$schema": "./prompts.schema.json",
+  "prompts": [
+    {
+      "name": "openapi",
+      "scope": ["api/**/*.ts"],
+      "destination": "public/openapi.json",
+      "prompt": "Consider the following files that are part of my api, and generate an openapi for this."
+    }
+  ]
+}

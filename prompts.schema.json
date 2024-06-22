@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "description": "A way to easily generate code inside your project",
+  "properties": {
+    "prompts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "scope": { "type": "array", "items": { "type": "string" } },
+          "destination": { "type": "string" },
+          "prompt": { "type": "string" }
+        }
+      }
+    }
+  }
+}
