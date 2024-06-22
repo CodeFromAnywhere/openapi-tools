@@ -14,6 +14,7 @@ export const GET = async (request: Request) => {
     openapiId && openapiUrl
       ? await getOpenapiOperations(openapiId, openapiUrl)
       : undefined;
+  console.log({ openapiUrl });
 
   if (!openapiDetails) {
     return;
