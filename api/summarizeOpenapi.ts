@@ -47,7 +47,10 @@ export const GET = async (request: Request) => {
     .filter(notEmpty);
 
   if (isJson) {
-    return Response.json(operationsPerTag);
+    return new Response(JSON.stringify(operationsPerTag), {
+      headers: { "Content-Type": "application/json" },
+      status: 200,
+    });
   }
 
   const llmString = operationsPerTag

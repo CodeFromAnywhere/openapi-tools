@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "from-anywhere": "^0.0.35",
-    "openapi-util": "^0.0.63"
+    "openapi-util": "0.0.64"
   }
 }
