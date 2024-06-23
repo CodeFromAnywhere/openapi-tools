@@ -1,20 +1,131 @@
 {
-  "x-actionschema": "0.0.1",
-  "$schema": "https://raw.githubusercontent.com/CodeFromAnywhere/ActionSchema/main/schemas/openapi.schema.json",
-  "openapi": "3.0.1",
-
+  "openapi": "3.0.0",
   "info": {
-    "title": "Deployment API",
-    "description": "Serverless API for managing Github and Vercel integrations",
-    "version": "1.0.0"
+    "title": "API Specification",
+    "version": "1.0.0",
+    "description": "API specification for pruneOpenapi and summarizeOpenapi endpoints"
   },
-
   "servers": [{ "url": "https://openapi-tools.actionschema.com" }],
-
-  "paths": {},
-
-  "components": {
-    "schemas": {},
-    "securitySchemes": {}
+  "paths": {
+    "/pruneOpenapi": {
+      "get": {
+        "summary": "Prune OpenAPI Specification",
+        "description": "Get a simplified OpenAPI specification that is dereferenced and only contains the specified operationIds.",
+        "operationId": "pruneOpenapi",
+        "parameters": [
+          {
+            "name": "openapiUrl",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "URL of the OpenAPI specification to prune"
+          },
+          {
+            "name": "operationIds",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of operationIds to include in the pruned specification"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/yaml": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "OpenAPI specification not found"
+          },
+          "422": {
+            "description": "Missing required parameters"
+          }
+        }
+      }
+    },
+    "/summarizeOpenapi": {
+      "get": {
+        "summary": "Summarize OpenAPI Specification",
+        "description": "Get all operationId/summary pairs for any OpenAPI specification in text or JSON format.",
+        "operationId": "summarizeOpenapi",
+        "parameters": [
+          {
+            "name": "openapiUrl",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "URL of the OpenAPI specification to summarize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "operations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "operation": {
+                              "type": "object",
+                              "properties": {
+                                "summary": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
