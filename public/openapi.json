@@ -38,7 +38,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "info": {
+                      "type": "object",
+                      "properties": { "title": { "type": "string" } }
+                    }
+                  }
                 }
               },
               "application/yaml": {
