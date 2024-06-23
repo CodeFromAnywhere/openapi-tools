@@ -119,7 +119,7 @@ export const GET = async (request: Request) => {
     paths,
   };
 
-  if (isJson) {
+  if (isJson || true) {
     return new Response(JSON.stringify(newOpenapiJson), {
       headers: { "Content-Type": "application/json" },
       status: 200,
@@ -136,6 +136,7 @@ export const GET = async (request: Request) => {
     });
   }
 
+  // TODO:
   return new Response(
     "Hello world. Idk what to write here... Maybe a typescript version?",
     { headers: { "Content-Type": "text/plain" }, status: 200 },
