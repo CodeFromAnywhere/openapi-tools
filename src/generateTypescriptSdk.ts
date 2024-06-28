@@ -338,11 +338,11 @@ export const generateTypescriptSdk = async (context: GenerateSdkContext) => {
     sdks.map((item) => ({ [`${item.slug}.ts`]: item.code })),
   );
 
-  const files = {
+  const files: { [filePath: string]: string } = {
     ["client.ts"]: clientScript,
     [`createClient.ts`]: createClient,
     ...sdkFiles,
   };
 
-  return files;
+  return { files };
 };
