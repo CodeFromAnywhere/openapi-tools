@@ -6,7 +6,7 @@ import openapiTS, {
 } from "openapi-typescript";
 import { fetchOpenapi } from "./fetchOpenapi.js";
 import { parseOpenapiFromFile } from "./parseOpenapiFromFile.js";
-import { mergeObjectsArray, notEmpty } from "from-anywhere";
+import { camelCase, mergeObjectsArray, notEmpty } from "from-anywhere";
 
 const createClient = `
 //<script>
@@ -271,7 +271,9 @@ const getClientScript = (
   const imports = openapis
     .map((item) => {
       const { slug } = item;
-      return `import { operationUrlObject as ${slug}_operationUrlObject, operations as ${slug}_operations } from "./${slug}.js";`;
+      const newObjectName = camelCase(`${slug}_operationUrlObject`);
+      const newOperationsName = camelCase(`${slug}_operations`);
+      return `import { operationUrlObject as ${newObjectName}, operations as ${newOperationsName} } from "./${slug}.js";`;
     })
     .join("\n");
 
@@ -281,7 +283,7 @@ const getClientScript = (
       //<script> // put it down to get color highlights (with string-highlight extension)
       return ` 
 
-export const ${slug} = createClient({
+export const ${camelCase(slug)} = createClient({
   baseUrl: "${baseUrl}",
   headers: {
     Accept: "application/json",
@@ -295,8 +297,10 @@ export const ${slug} = createClient({
     })
     .join("\n\n");
 
-  return `${imports}
-import { createClient } from "./createClient.js";
+  return `import { createClient } from "./createClient.js";
+  
+${imports}
+
 
 ${clients}`;
 };
