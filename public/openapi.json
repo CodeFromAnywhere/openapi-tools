@@ -1,5 +1,7 @@
 {
-  "openapi": "3.1.0",
+  "x-actionschema": "0.0.1",
+  "$schema": "https://raw.githubusercontent.com/CodeFromAnywhere/ActionSchema/main/schemas/openapi.schema.json",
+  "openapi": "3.0.0",
   "info": {
     "title": "API Specification",
     "version": "1.0.0",
@@ -209,16 +211,12 @@
       },
       "GenerateSdkResponse": {
         "type": "object",
-        "required": ["env", "sdk"],
+        "required": ["files"],
         "properties": {
-          "env": {
+          "files": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          },
-          "sdk": {
-            "type": "string"
+            "properties": {},
+            "additionalProperties": { "type": "string" }
           }
         }
       }
