@@ -7,6 +7,45 @@
   },
   "servers": [{ "url": "https://openapi-tools.actionschema.com" }],
   "paths": {
+    "/generateSdk": {
+      "post": {
+        "summary": "Generate SDK",
+        "description": "Generates a single SDK for multiple (subsets of) OpenAPI specifications",
+        "operationId": "generateSdk",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateSdkContext"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSdkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/pruneOpenapi": {
       "get": {
         "summary": "Prune OpenAPI Specification",
@@ -129,6 +168,57 @@
                 }
               }
             }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GenerateSdkContext": {
+        "type": "object",
+        "required": ["openapis"],
+        "properties": {
+          "openapis": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["envKeyName", "openapiUrl", "slug"],
+              "properties": {
+                "slug": {
+                  "type": "string",
+                  "description": "Used as prefix for the operation (e.g. `sdk.userCrud.create`). If not given, can be inferred from `openapi.info.title` or, if not existent, from `openapiUrl`"
+                },
+                "envKeyName": {
+                  "type": "string"
+                },
+                "operationIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "If given, will only put this subset in the SDK"
+                },
+                "openapiUrl": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GenerateSdkResponse": {
+        "type": "object",
+        "required": ["env", "sdk"],
+        "properties": {
+          "env": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "sdk": {
+            "type": "string"
           }
         }
       }

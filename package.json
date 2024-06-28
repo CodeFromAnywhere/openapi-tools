@@ -4,11 +4,14 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.14.7",
     "typescript": "^5.4.5"
   },
   "dependencies": {
     "from-anywhere": "^0.0.35",
+    "js-yaml": "^4.1.0",
+    "openapi-typescript": "^7.0.0",
     "openapi-util": "0.0.64"
   }
 }
