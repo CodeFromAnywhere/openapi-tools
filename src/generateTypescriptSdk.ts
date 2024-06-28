@@ -8,57 +8,70 @@ import { fetchOpenapi } from "./fetchOpenapi.js";
 import { parseOpenapiFromFile } from "./parseOpenapiFromFile.js";
 import { camelCase, mergeObjectsArray, notEmpty } from "from-anywhere";
 
-const createClient = `
 //<script>
+const createClientCode = `
 
-export type PromiseOrNot<T> = Promise<T> | T;
+export const createClient = <
+  operations extends {
+    [key: string]: {
+      parameters: { [key: string]: any };
+      requestBody: { [key: string]: any };
+      responses: { [key: string]: any };
+    };
+  },
+>(
+  operationUrlObject: {
+    [operationId in keyof operations]: { method: string; path: string };
+  },
+  config: {
+    timeoutSeconds?: number;
+    /**
+     * Server URL without slash at the end
+     */
+    baseUrl?: string;
+    headers: { [key: string]: string };
+  },
+) => {
+  type PromiseOrNot<T> = Promise<T> | T;
 
-export type GetParameters<K extends keyof operations> =
-  | operations[K]["parameters"]["cookie"]
-  | operations[K]["parameters"]["header"]
-  | operations[K]["parameters"]["path"]
-  | operations[K]["parameters"]["query"];
+  type GetParameters<K extends keyof operations> =
+    | operations[K]["parameters"]["cookie"]
+    | operations[K]["parameters"]["header"]
+    | operations[K]["parameters"]["path"]
+    | operations[K]["parameters"]["query"];
 
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
-  k: infer I,
-) => void
-  ? I
-  : never;
+  type UnionToIntersection<U> = (
+    U extends any ? (k: U) => void : never
+  ) extends (k: infer I) => void
+    ? I
+    : never;
 
-// Typescript magic from: https://stackoverflow.com/questions/63542526/merge-discriminated-union-of-object-types-in-typescript
-type MergeIntersection<U> = UnionToIntersection<U> extends infer O
-  ? { [K in keyof O]: O[K] }
-  : never;
+  // Typescript magic from: https://stackoverflow.com/questions/63542526/merge-discriminated-union-of-object-types-in-typescript
+  type MergeIntersection<U> = UnionToIntersection<U> extends infer O
+    ? { [K in keyof O]: O[K] }
+    : never;
 
-type MergeParameters<P> = MergeIntersection<Extract<P, {}>>;
+  type MergeParameters<P> = MergeIntersection<Extract<P, {}>>;
 
-export type EndpointBody<T extends keyof operations> =
-  (operations[T]["requestBody"] extends {}
-    ? operations[T]["requestBody"]["content"]["application/json"]
-    : {}) &
-    MergeParameters<GetParameters<T>>;
+  type EndpointBody<T extends keyof operations> =
+    (operations[T]["requestBody"] extends {}
+      ? operations[T]["requestBody"]["content"]["application/json"]
+      : {}) &
+      MergeParameters<GetParameters<T>>;
 
-export type EndpointContext<K extends keyof operations> =
-  (operations[K]["requestBody"] extends {}
-    ? operations[K]["requestBody"]["content"]["application/json"]
-    : {}) &
-    MergeParameters<GetParameters<K>>;
+  type Endpoint<T extends keyof operations> = (
+    context: EndpointContext<T>,
+  ) => PromiseOrNot<ResponseType<T>>;
 
-export type ResponseType<T extends keyof operations> =
-  operations[T]["responses"][200]["content"]["application/json"];
+  type EndpointContext<K extends keyof operations> =
+    (operations[K]["requestBody"] extends {}
+      ? operations[K]["requestBody"]["content"]["application/json"]
+      : {}) &
+      MergeParameters<GetParameters<K>>;
 
-export type Endpoint<T extends keyof operations> = (
-  context: EndpointContext<T>,
-) => PromiseOrNot<ResponseType<T>>;
+  type ResponseType<T extends keyof operations> =
+    operations[T]["responses"][200]["content"]["application/json"];
 
-export const createClient = (config: {
-  timeoutSeconds?: number;
-  /**
-   * Server URL without slash at the end
-   */
-  baseUrl?: string;
-  headers: { [key: string]: string };
-}) => {
   const client = async <K extends keyof operations>(
     operation: K,
     body?: EndpointContext<K>,
@@ -75,7 +88,7 @@ export const createClient = (config: {
     const { headers, baseUrl } = customConfiguration || config;
 
     if (!details) {
-      throw new Error("No details found for operation:" + operation");
+      throw new Error("No details found for operation:" + String(operation));
     }
     if (!baseUrl) {
       throw new Error("No baseUrl found");
@@ -126,7 +139,8 @@ export const createClient = (config: {
         })
         .catch((error) => {
           console.log({
-            explanation: "Your request could not be executed, you may be disconnected or the server may not be available. ",
+            explanation:
+              "Your request could not be executed, you may be disconnected or the server may not be available. ",
             error,
             errorStatus: error.status,
             errorString: String(error),
@@ -280,10 +294,15 @@ const getClientScript = (
   const clients = openapis
     .map((item) => {
       const { slug, baseUrl, envKeyName } = item;
+      const newObjectName = camelCase(`${slug}_operationUrlObject`);
+      const newOperationsName = camelCase(`${slug}_operations`);
+
       //<script> // put it down to get color highlights (with string-highlight extension)
       return ` 
 
-export const ${camelCase(slug)} = createClient({
+export const ${camelCase(
+        slug,
+      )} = createClient<${newOperationsName}>(${newObjectName}, {
   baseUrl: "${baseUrl}",
   headers: {
     Accept: "application/json",
@@ -344,7 +363,7 @@ export const generateTypescriptSdk = async (context: GenerateSdkContext) => {
 
   const files: { [filePath: string]: string } = {
     ["client.ts"]: clientScript,
-    [`createClient.ts`]: createClient,
+    [`createClient.ts`]: createClientCode,
     ...sdkFiles,
   };
 
