@@ -287,7 +287,8 @@ const getClientScript = (
       const { slug } = item;
       const newObjectName = camelCase(`${slug}_operationUrlObject`);
       const newOperationsName = camelCase(`${slug}_operations`);
-      return `import { operationUrlObject as ${newObjectName}, operations as ${newOperationsName} } from "./${slug}.js";`;
+      // NB: may need .js suffix in some envs. Figure out what determines this and uniformalise it. Better,don't accept both.
+      return `import { operationUrlObject as ${newObjectName}, operations as ${newOperationsName} } from "./${slug}";`;
     })
     .join("\n");
 
@@ -299,7 +300,7 @@ const getClientScript = (
 
       //<script> // put it down to get color highlights (with string-highlight extension)
       return ` 
-
+//@ts-ignore
 export const ${camelCase(
         slug,
       )} = createClient<${newOperationsName}>(${newObjectName}, {
@@ -316,7 +317,7 @@ export const ${camelCase(
     })
     .join("\n\n");
 
-  return `import { createClient } from "./createClient.js";
+  return `import { createClient } from "./createClient";
   
 ${imports}
 
