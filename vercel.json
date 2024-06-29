@@ -6,9 +6,7 @@
       "destination": "/api/:path*"
     }
   ],
-  "redirects": [
-    { "source": "/", "permanent": false, "destination": "/openapi.json" }
-  ],
+  "redirects": [],
   "functions": {
     "api/**/*.ts": {
       "maxDuration": 60,

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Duper Site</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+    <style>
+        .pirate-font {
+            font-family: 'Pirata One', cursive;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-5xl font-bold text-center text-gray-900 mb-12 pirate-font">Super Duper Site</h1>
+
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="flex border-b">
+                <button class="flex-1 py-2 px-4 text-center focus:outline-none tab-button active"
+                    data-tab="generateSdk">Generate SDK</button>
+                <button class="flex-1 py-2 px-4 text-center focus:outline-none tab-button" data-tab="pruneOpenapi">Prune
+                    OpenAPI</button>
+                <button class="flex-1 py-2 px-4 text-center focus:outline-none tab-button"
+                    data-tab="summarizeOpenapi">Summarize OpenAPI</button>
+            </div>
+
+            <!-- Generate SDK Form -->
+            <div id="generateSdk" class="tab-content p-6">
+                <h2 class="text-2xl font-semibold mb-4 pirate-font">Generate SDK</h2>
+                <p class="mb-4">Ahoy, matey! Be generatin' yer SDK to plunder APIs with ease. Choose from our treasure
+                    chest of examples or input yer own OpenAPI booty!</p>
+                <form id="generateSdkForm" class="space-y-4">
+                    <div>
+                        <label for="sdkExample" class="block text-sm font-medium text-gray-700">Choose an example, ye
+                            scurvy dog:</label>
+                        <select id="sdkExample"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <option value="">-- Select an example --</option>
+                            <option value="example1">Pirate's Log API</option>
+                            <option value="example2">Treasure Map API</option>
+                            <option value="example3">OpenAPI Tools API</option>
+                            <option value="example4">Petstore API</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="openapis" class="block text-sm font-medium text-gray-700">OpenAPIs (JSON)</label>
+                        <textarea id="openapis" name="openapis" rows="6"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            required></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Generate
+                        SDK</button>
+                </form>
+            </div>
+
+            <!-- Prune OpenAPI Form -->
+            <div id="pruneOpenapi" class="tab-content p-6 hidden">
+                <h2 class="text-2xl font-semibold mb-4 pirate-font">Prune OpenAPI Specification</h2>
+                <p class="mb-4">Shiver me timbers! Trim down yer OpenAPI spec like ye'd trim the sails. Pick the
+                    operations ye need, and we'll cut away the rest!</p>
+                <form id="pruneOpenapiForm" class="space-y-4">
+                    <div>
+                        <label for="pruneExample" class="block text-sm font-medium text-gray-700">Choose an example, ye
+                            landlubber:</label>
+                        <select id="pruneExample"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <option value="">-- Select an example --</option>
+                            <option value="example1">Pirate Ship API</option>
+                            <option value="example2">Parrot Training API</option>
+                            <option value="example3">OpenAPI Tools API</option>
+                            <option value="example4">Petstore API</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="openapiUrl" class="block text-sm font-medium text-gray-700">OpenAPI URL</label>
+                        <input type="url" id="openapiUrl" name="openapiUrl"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            required>
+                    </div>
+                    <div>
+                        <label for="operationIds" class="block text-sm font-medium text-gray-700">Operation IDs
+                            (comma-separated)</label>
+                        <input type="text" id="operationIds" name="operationIds"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            required>
+                    </div>
+                    <button type="submit"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Prune
+                        OpenAPI</button>
+                </form>
+            </div>
+
+            <!-- Summarize OpenAPI Form -->
+            <div id="summarizeOpenapi" class="tab-content p-6 hidden">
+                <h2 class="text-2xl font-semibold mb-4 pirate-font">Summarize OpenAPI Specification</h2>
+                <p class="mb-4">Yo ho ho! Get a bird's eye view of yer API treasure map. We'll give ye a summary faster
+                    than ye can say "Dead men tell no tales"!</p>
+                <form id="summarizeOpenapiForm" class="space-y-4">
+                    <div>
+                        <label for="summarizeExample" class="block text-sm font-medium text-gray-700">Choose an example,
+                            ye bilge rat:</label>
+                        <select id="summarizeExample"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <option value="">-- Select an example --</option>
+                            <option value="example1">Pirate Crew API</option>
+                            <option value="example2">Treasure Hunting API</option>
+                            <option value="example3">OpenAPI Tools API</option>
+                            <option value="example4">Petstore API</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="summarizeOpenapiUrl" class="block text-sm font-medium text-gray-700">OpenAPI
+                            URL</label>
+                        <input type="url" id="summarizeOpenapiUrl" name="openapiUrl"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            required>
+                    </div>
+                    <button type="submit"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">Summarize
+                        OpenAPI</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = 'https://openapi-tools.actionschema.com';
+
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.getAttribute('data-tab');
+                tabButtons.forEach(btn => btn.classList.remove('active', 'bg-gray-200'));
+                tabContents.forEach(content => content.classList.add('hidden'));
+                button.classList.add('active', 'bg-gray-200');
+                document.getElementById(tabName).classList.remove('hidden');
+            });
+        });
+
+        // Example data
+        const examples = {
+            generateSdk: {
+                example1: {
+                    openapis: JSON.stringify([
+                        {
+                            slug: "pirate-log",
+                            envKeyName: "PIRATE_LOG_API_KEY",
+                            openapiUrl: "https://api.pirateLog.com/openapi.json"
+                        }
+                    ], null, 2)
+                },
+                example2: {
+                    openapis: JSON.stringify([
+                        {
+                            slug: "treasure-map",
+                            envKeyName: "TREASURE_MAP_API_KEY",
+                            openapiUrl: "https://api.treasureMap.com/openapi.json"
+                        }
+                    ], null, 2)
+                },
+                example3: {
+                    openapis: JSON.stringify([
+                        {
+                            slug: "openapi-tools",
+                            envKeyName: "OPENAPI_TOOLS_API_KEY",
+                            openapiUrl: "https://openapi-tools.actionschema.com/openapi.json"
+                        }
+                    ], null, 2)
+                },
+                example4: {
+                    openapis: JSON.stringify([
+                        {
+                            slug: "petstore",
+                            envKeyName: "PETSTORE_API_KEY",
+                            openapiUrl: "https://petstore.swagger.io/v2/swagger.json"
+                        }
+                    ], null, 2)
+                }
+            },
+            pruneOpenapi: {
+                example1: {
+                    openapiUrl: "https://api.pirateShip.com/openapi.json",
+                    operationIds: "getSails,setAnchor,fireCanons"
+                },
+                example2: {
+                    openapiUrl: "https://api.parrotTraining.com/openapi.json",
+                    operationIds: "teachPhrase,feedCracker,cleanCage"
+                },
+                example3: {
+                    openapiUrl: "https://openapi-tools.actionschema.com/openapi.json",
+                    operationIds: "pruneOpenapi,summarizeOpenapi"
+                },
+                example4: {
+                    openapiUrl: "https://petstore.swagger.io/v2/swagger.json",
+                    operationIds: "getPetById,updatePet,deletePet"
+                }
+            },
+            summarizeOpenapi: {
+                example1: {
+                    openapiUrl: "https://api.pirateCrew.com/openapi.json"
+                },
+                example2: {
+                    openapiUrl: "https://api.treasureHunting.com/openapi.json"
+                },
+                example3: {
+                    openapiUrl: "https://openapi-tools.actionschema.com/openapi.json"
+                },
+                example4: {
+                    openapiUrl: "https://petstore.swagger.io/v2/swagger.json"
+                }
+            }
+        };
+
+        // Populate examples
+        document.getElementById('sdkExample').addEventListener('change', (e) => {
+            if (e.target.value) {
+                document.getElementById('openapis').value = examples.generateSdk[e.target.value].openapis;
+            }
+        });
+
+        document.getElementById('pruneExample').addEventListener('change', (e) => {
+            if (e.target.value) {
+                document.getElementById('openapiUrl').value = examples.pruneOpenapi[e.target.value].openapiUrl;
+                document.getElementById('operationIds').value = examples.pruneOpenapi[e.target.value].operationIds;
+            }
+        });
+
+        document.getElementById('summarizeExample').addEventListener('change', (e) => {
+            if (e.target.value) {
+                document.getElementById('summarizeOpenapiUrl').value = examples.summarizeOpenapi[e.target.value].openapiUrl;
+            }
+        });
+
+        // Form submission
+        document.getElementById('generateSdkForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const openapis = JSON.parse(document.getElementById('openapis').value);
+            window.location.href = `${baseUrl}/generateSdk?openapis=${encodeURIComponent(JSON.stringify(openapis))}`;
+        });
+
+        document.getElementById('pruneOpenapiForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const openapiUrl = document.getElementById('openapiUrl').value;
+            const operationIds = document.getElementById('operationIds').value;
+            window.location.href = `${baseUrl}/pruneOpenapi?openapiUrl=${encodeURIComponent(openapiUrl)}&operationIds=${encodeURIComponent(operationIds)}`;
+        });
+
+        document.getElementById('summarizeOpenapiForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const openapiUrl = document.getElementById('summarizeOpenapiUrl').value;
+            window.location.href = `${baseUrl}/summarizeOpenapi?openapiUrl=${encodeURIComponent(openapiUrl)}`;
+        });
+    </script>
+</body>
+
+</html>
